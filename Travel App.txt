@@ -1,0 +1,60 @@
+Travel App:
+
+1. Department :
+	a. Department Code : Required, Unique, case sensitive
+  
+   
+2.	Travel Approval : Auto Number TA-{00000}
+	a. Purpose of Trip
+	b. Status (New, Submitted, Pending Approval, Approved, Rejected,Draft)
+	c. Trip Start Date
+	d. Trip Start Date
+	e. Out-of-State
+	f. Destination State (length - 2)
+	g. Department (Look up)
+	h.Total Expenses(Rollup summary) - Sum of amount in Total Expenses
+	i. Status Indicator
+		IF( ISPICKVAL( Status__c , 'Approved') , IMAGE("/resource/StatusImages/thumbs-up.png", "Accepted", 20, 20),
+		IF ( ISPICKVAL( Status__c , 'Rejected'), IMAGE("/resource/StatusImages/thumbs-down.png", "Rejected", 20, 20),
+		IMAGE("/resource/StatusImages/draft.png", "In-Process", 20, 20)))
+	
+	1.Customize the User Interface for a Travel Approval:
+	 Page Layout
+	 under list view created new and filtering with conditions
+		Open Out of State Travel Requests:
+			Click Add Filter and enter these details:
+				Field: Out-of-State
+				Operator: equals
+				Value: True
+
+			Click Add Filter again and enter these details:
+				Field: Status
+				Operator: not equal to
+				Value: Approved, Rejected
+	2.validation rule :
+		trip end date >= the trip start date.
+	3.Process Builder
+		a. Set Out of State Travel Flag : When a record is created or edited
+			Criteria : Destination State Does not equal TX (Out of State Travel)
+			Action : Update Records, Out-of-State is true (Set out of state checkbox field)
+	4. Approval Process :
+		a. All travel approvals are sent to the employee’s direct manager for approval.
+		2b. If the trip is out of state, the approval is also sent to a travel coordinator for approval. If not out of state, this step is skipped.
+	
+
+
+3. Expense Item : Auto Number E-{00000}
+	a. Amount ( Required)
+	b. Expense Type (Airfare, Hotel, Rental car, Meals, Other)
+	c. Travel Approval ( Master detail)
+	
+Enable Chatter on the travel approval app to allow for in-app collaboration.
+
+Create user and assign the user as manager in your profile.
+
+				
+Reports:
+	1.Travel Requests by Department Report
+	2.Travel Requests by Month Report
+	
+
